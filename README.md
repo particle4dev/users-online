@@ -13,3 +13,6 @@ Publish to user:
             return false;
         return true;
     });
+
+Find user is online :
+    UsersOnline.find()
