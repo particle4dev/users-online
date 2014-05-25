@@ -1,9 +1,3 @@
-// wrapped !!!
-var logoutMethod = Meteor.server.method_handlers['logout'];
-Meteor.server.method_handlers['logout'] = function () {
-    removeWithUserId(this.userId);
-    logoutMethod.call(this);
-};
 /**
     {
         _id:
@@ -16,6 +10,13 @@ Meteor.server.method_handlers['logout'] = function () {
 UsersOnline = new Meteor.Collection('usersonline', {
     connection: null
 });
+
+// wrapped logout method!!!
+var logoutMethod = Meteor.server.method_handlers['logout'];
+Meteor.server.method_handlers['logout'] = function () {
+    removeWithUserId(this.userId);
+    logoutMethod.call(this);
+};
 
 var insert = function (user, connectionId) {
     var u = UsersOnline.findOne({
@@ -68,10 +69,24 @@ Meteor.server.onConnection(function (connection) {
 Accounts.onLogin(function (info) {
     return insert(info.user, info.connection.id);
 });
+
 //name String
 //Name of the record set. If null, the set has no name, and the record set is automatically sent to all connected clients.
 Meteor.publish(null, function () {
+    var sub = this;
+    if (!userIdFilter(this.userId)) {
+        sub.ready();
+        return;
+    }
     return UsersOnline.find();
 }, /*suppress autopublish warning*/ {
     is_auto: true
 });
+
+var userIdFilter = function (userId) {
+    return !!Package.autopublish;
+};
+// XXX make this take effect at runtime too?
+UsersOnline.setUserIdFilter = function (filter) {
+    userIdFilter = filter;
+};
