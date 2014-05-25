@@ -1,0 +1,1 @@
+UsersOnline = new Meteor.Collection('usersonline');
