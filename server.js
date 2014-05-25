@@ -26,7 +26,11 @@ var insert = function (user, connectionId) {
         // not found
         return UsersOnline.insert({
             connection: [connectionId],
-            user: user
+            user: {
+                profile: user.profile,
+                username: user.username,
+                emails : user.emails
+            }
         });
     }
     UsersOnline.update(u._id, {

@@ -1,0 +1,15 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "users-online": {
+        "path": "."
+      }
+    },
+    "packages": {
+      "users-online": {
+        "path": "."
+      }
+    }
+  }
+}
