@@ -3,6 +3,6 @@
   "description": "Keeps track of user connection state",
   "homepage": "https://github.com/particle4dev/users-online",
   "author": "Le Hoang (https://github.com/particle4dev)",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "git": "https://github.com/particle4dev/users-online.git"
 }

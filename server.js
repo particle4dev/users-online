@@ -27,6 +27,7 @@ var insert = function (user, connectionId) {
         return UsersOnline.insert({
             connection: [connectionId],
             user: {
+                _id: user._id,
                 profile: user.profile,
                 username: user.username,
                 emails : user.emails
