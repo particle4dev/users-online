@@ -17,3 +17,15 @@ Publish to user:
 Find user is online :
 
     UsersOnline.find()
+
+Set transformation function:
+
+    UsersOnline.setUserTransform(function(user){
+        return {
+            _id: user._id,
+            profile: user.profile,
+            username: user.username,
+            emails : user.emails,
+            updated: user.updated
+        };
+    });

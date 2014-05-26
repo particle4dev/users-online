@@ -95,3 +95,14 @@ var userIdFilter = function (userId) {
 UsersOnline.setUserIdFilter = function (filter) {
     userIdFilter = filter;
 };
+var userTransform = function (user) {
+    return {
+        _id: user._id,
+        profile: user.profile,
+        username: user.username,
+        emails : user.emails
+    };
+};
+UsersOnline.setUserTransform = function (func) {
+    userTransform = func;
+};
