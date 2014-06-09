@@ -1,3 +1,18 @@
+var Connections = (function(){
+    var list_ = {};
+    return {
+        push: function(connection){
+            list_[connection.id] = Meteor.server.sessions[connection.id];
+        },
+        pop: function(connectionId){
+            list_[connectionId] = null;
+            delete list_[connectionId];
+        },
+        sendMessage: function(connectionId, message){
+            list_[connectionId].sendAdded('messageusersonline', Random.id(), message);
+        }
+    };
+})();
 /**
     {
         _id:
@@ -7,6 +22,7 @@
         user: {...}
     }
 */
+
 UsersOnline = new Meteor.Collection('usersonline', {
     connection: null
 });
@@ -62,8 +78,10 @@ var removeWithUserId = function (userId) {
     });
 };
 Meteor.server.onConnection(function (connection) {
+    Connections.push(connection);
     connection.onClose(function () {
         remove(connection.id);
+        Connections.pop(connection.id);
     });
 });
 Accounts.onLogin(function (info) {
@@ -101,3 +119,21 @@ var userTransform = function (user) {
 UsersOnline.setUserTransform = function (func) {
     userTransform = func;
 };
+
+/**
+ *
+ */
+Meteor.methods({
+    'sendMessageToUser': function(userId, message){
+        var self = this;
+        var sender = Meteor.users.findOne(self.userId);
+        UsersOnline.find({'user._id': { $in: [userId, self.userId] }}).forEach(function(conn){
+            Connections.sendMessage(conn.connection, {
+                userId: sender._id,
+                image: sender.profile.image,
+                message: message,
+                updated: new Date()
+            });
+        });
+    }
+});

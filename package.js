@@ -11,7 +11,7 @@ var server = ['server'];
 
 Package.on_use(function (api) {
     api.use('accounts-base');
-
+    api.use('underscore');
     // server
     api.add_files(["server.js"], server);
     // client
@@ -19,5 +19,6 @@ Package.on_use(function (api) {
     
     if (typeof api.export !== 'undefined') {
         api.export('UsersOnline', both);
+        api.export('MessageUsersOnline', client);
     }
 });
